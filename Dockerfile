@@ -4,8 +4,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn --production
+RUN yarn
 
 COPY . .
+
+RUN yarn prisma generate
 
 CMD [ "npm", "start" ]

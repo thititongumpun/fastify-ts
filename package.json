@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "rm -rf build && tsc && node ./build/app.js"
+    "start": "tsc && node ./build/app.js"
   },
   "license": "MIT",
   "dependencies": {
