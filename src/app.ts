@@ -5,6 +5,7 @@ import {
   FastifyReply,
 } from "fastify";
 import fastifyJwt from "@fastify/jwt";
+import cors from '@fastify/cors';
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 
@@ -16,6 +17,13 @@ declare module "fastify" {
 
 export const server: FastifyInstance = fastify({
   logger: true,
+});
+
+server.register(cors, { 
+  allowedHeaders: "*",
+  origin: true,
+  exposedHeaders: "*",
+  credentials: true
 });
 
 server.register(fastifyJwt, {

@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN yarn --production
 
+ENV PORT {PORT}
+
 COPY . .
 
 CMD [ "npm", "start" ]

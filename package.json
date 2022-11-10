@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.3.2",
     "@prisma/client": "^4.5.0",
     "crypto": "^1.0.1",
