@@ -9,7 +9,7 @@ import cors from "@fastify/cors";
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 
-const PORT = 8080 || process.env.PORT;
+const PORT = process.env.PORT || 8080;
 declare module "fastify" {
   interface FastifyRequest {
     jwt: JWT;
