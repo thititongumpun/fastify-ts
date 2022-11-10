@@ -4,13 +4,16 @@ import {
   FastifyRequest,
   FastifyReply,
 } from "fastify";
-import fastifyJwt from "@fastify/jwt";
-import cors from '@fastify/cors';
+import fastifyJwt, { JWT } from "@fastify/jwt";
+import cors from "@fastify/cors";
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 
-const PORT = 8000 || process.env.PORT;
+const PORT = 8080 || process.env.PORT;
 declare module "fastify" {
+  interface FastifyRequest {
+    jwt: JWT;
+  }
   export interface FastifyInstance {
     authenticate: any;
   }
@@ -20,11 +23,11 @@ export const server: FastifyInstance = fastify({
   logger: true,
 });
 
-server.register(cors, { 
+server.register(cors, {
   allowedHeaders: "*",
   origin: true,
   exposedHeaders: "*",
-  credentials: true
+  credentials: true,
 });
 
 server.register(fastifyJwt, {
@@ -41,6 +44,11 @@ server.decorate(
     }
   }
 );
+
+server.addHook("preHandler", (req, reply, next) => {
+  req.jwt = server.jwt;
+  return next();
+});
 
 server.register(userRoutes, { prefix: "api/users" });
 
