@@ -53,9 +53,9 @@ export async function loginHandler(
     return reply.code(401).send({
       message: "invalid email or password",
     });
-  } catch (e) {
-    console.error(e);
-    return reply.code(500).send(e);
+  } catch (err) {
+    console.error(err);
+    return reply.code(500).send(err);
   }
 }
 
