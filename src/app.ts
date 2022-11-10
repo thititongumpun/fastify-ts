@@ -45,11 +45,6 @@ server.decorate(
   }
 );
 
-server.addHook("preHandler", (req, reply, next) => {
-  req.jwt = server.jwt;
-  return next();
-});
-
 server.register(userRoutes, { prefix: "api/users" });
 
 for (const schema of userSchemas) {
@@ -60,10 +55,6 @@ server.get("/healthcheck", async () => {
   return { status: "OK" };
 });
 
-server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
+server.listen(PORT, "0.0.0.0", (err, address) => {
   console.log(`Server listening at ${address}`);
 });
