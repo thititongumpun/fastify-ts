@@ -9,6 +9,7 @@ import cors from '@fastify/cors';
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 
+const PORT = 8000 || process.env.PORT;
 declare module "fastify" {
   export interface FastifyInstance {
     authenticate: any;
@@ -51,7 +52,7 @@ server.get("/healthcheck", async () => {
   return { status: "OK" };
 });
 
-server.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {
+server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
