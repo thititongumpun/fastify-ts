@@ -55,6 +55,15 @@ server.get("/healthcheck", async () => {
   return { status: "OK" };
 });
 
+server.addHook("preHandler", (request, reply, next) => {
+  request.jwt = server.jwt;
+  return next();
+});
+
 server.listen(PORT, "0.0.0.0", (err, address) => {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
   console.log(`Server listening at ${address}`);
 });
