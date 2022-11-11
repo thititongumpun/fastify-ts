@@ -13,9 +13,9 @@ export async function registerUserHandler(
     const user = await createUser(body);
 
     return reply.code(200).send(user);
-  } catch (e) {
-    console.error(e);
-    return reply.code(500).send(e);
+  } catch (err) {
+    console.error(err);
+    return reply.code(500).send(err);
   }
 }
 
@@ -37,7 +37,11 @@ export async function loginHandler(
     const correctPassword = verifyPassword(body.password, user.password);
 
     if (correctPassword) {
-      return { accessToken: request.jwt.sign({}) };
+      return {
+        email: user.email,
+        name: user.name,
+        accessToken: request.jwt.sign(user, { expiresIn: "15d" }),
+      };
     }
 
     return reply.code(401).send({

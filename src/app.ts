@@ -6,6 +6,8 @@ import {
 } from "fastify";
 import fastifyJwt, { JWT } from "@fastify/jwt";
 import cors from "@fastify/cors";
+import swagger from "@fastify/swagger";
+import { withRefResolver } from "fastify-zod";
 import userRoutes from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 
@@ -16,9 +18,14 @@ declare module "fastify" {
   }
   export interface FastifyInstance {
     authenticate: any;
-    brypt: any;
   }
 }
+
+declare const process: {
+  env: {
+    PORT: number | undefined;
+  };
+};
 
 export const server: FastifyInstance = fastify({
   logger: true,
@@ -48,6 +55,26 @@ server.decorate(
 
 server.register(userRoutes, { prefix: "api/users" });
 
+server.register(
+  swagger,
+  withRefResolver({
+    routePrefix: "/swagger",
+    swagger: {
+      info: {
+        title: "Fastify AP",
+        description: "Fastify API",
+        version: "0.1.0",
+      },
+      host: "localhost",
+      schemes: ["http"],
+      consumes: ["application/json"],
+      produces: ["application/json"],
+    },
+    exposeRoute: true,
+    staticCSP: true,
+  })
+);
+
 for (const schema of userSchemas) {
   server.addSchema(schema);
 }
@@ -61,10 +88,9 @@ server.addHook("preHandler", (request, reply, next) => {
   return next();
 });
 
-server.listen(PORT, "0.0.0.0", (err, address) => {
+server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.log(err);
-    process.exit(1);
   }
   console.log(`Server listening at ${address}`);
 });

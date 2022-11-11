@@ -35,6 +35,8 @@ const loginSchema = z.object({
 });
 
 const loginResponseSchema = z.object({
+  email: z.string(),
+  name: z.string(),
   accessToken: z.string(),
 });
 
