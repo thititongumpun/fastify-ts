@@ -34,16 +34,10 @@ export async function loginHandler(
       });
     }
 
-    const correctPassword = verifyPassword({
-      password: body.password,
-      salt: user.salt,
-      hash: user.password,
-    });
+    const correctPassword = verifyPassword(body.password, user.password);
 
     if (correctPassword) {
-      const { password, salt, ...rest } = user;
-
-      return { accessToken: request.jwt.sign(rest) };
+      return { accessToken: request.jwt.sign({}) };
     }
 
     return reply.code(401).send({

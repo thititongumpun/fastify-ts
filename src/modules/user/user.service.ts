@@ -4,11 +4,10 @@ import { hashPassword } from "../../utils/hash";
 
 export async function createUser(input: CreateUserInput) {
   const { password, ...rest } = input;
-
-  const { hash, salt } = hashPassword(password);
+  const generateHashPassword = hashPassword(password);
 
   const user = await prisma.user.create({
-    data: { ...rest, salt, password: hash },
+    data: { ...rest, password: generateHashPassword },
   });
 
   return user;

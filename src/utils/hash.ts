@@ -1,27 +1,16 @@
 import crypto from "crypto";
+import * as bcrypt from "bcrypt";
 
-export function hashPassword(password: string) {
-  const salt = crypto.randomBytes(16).toString("hex");
+export const hashPassword = (password: string) => {
+  const salt = bcrypt.genSaltSync(10);
+  const hashPassword = bcrypt.hashSync(password, salt);
 
-  const hash = crypto
-    .pbkdf2Sync(password, salt, 1000, 64, "sha512")
-    .toString("hex");
+  return hashPassword;
+};
 
-  return { salt, hash };
-}
-
-export function verifyPassword({
-  password,
-  salt,
-  hash,
-}: {
-  password: string;
-  salt: string;
-  hash: string;
-}) {
-  const candidateHash = crypto
-    .pbkdf2Sync(password, salt, 1000, 64, "sha512")
-    .toString("hex");
-
-  return candidateHash === hash;
-}
+export const verifyPassword = (
+  password: string,
+  existsPassword: string
+): boolean => {
+  return bcrypt.compareSync(password, existsPassword);
+};
